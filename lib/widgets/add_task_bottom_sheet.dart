@@ -5,14 +5,26 @@ import 'package:to_do_list_app/widgets/task.dart';
 import 'package:to_do_list_app/widgets/task_date_form_field.dart';
 import 'package:to_do_list_app/widgets/task_form_field.dart';
 
-class AddTaskBottomSheet extends StatelessWidget {
+class AddTaskBottomSheet extends StatefulWidget {
+  const AddTaskBottomSheet({super.key});
+
+  @override
+  State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
+}
+
+class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   final GlobalKey<FormState> formKey = GlobalKey();
+
   final TextEditingController taskController = TextEditingController();
+
   final GlobalKey<FormState> dateFormKey = GlobalKey();
+
   DateTime? taskCreatedDate;
+
   List<bool> isActive = [false, false, false];
+
   List<String> tags = [];
-  AddTaskBottomSheet({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -103,20 +115,17 @@ class AddTaskBottomSheet extends StatelessWidget {
                       : isActive[1]
                       ? 'Medium'
                       : 'High';
-                  tasks.add(
-                    Task(
-                      taskTitle: taskController.text,
-                      taskDate: taskCreatedDate,
-                      priority: priority,
-                      tags: tags,
-                    ),
+
+                  Task taskAdded = Task(
+                    taskTitle: taskController.text,
+                    taskDate: taskCreatedDate,
+                    priority: priority,
+                    tags: tags,
                   );
-                  print('Task Added!');
-                  print(tasks[4]);
-                  Navigator.pop(context);
-                } else {
-                  print('Task Failed');
-                }
+
+                  setState(() {});
+                  Navigator.pop(context, taskAdded);
+                } else {}
               },
             ),
             SizedBox(height: 16),

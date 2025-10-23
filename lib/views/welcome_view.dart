@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_list_app/views/tasks_list_view.dart';
+import 'package:to_do_list_app/views/home_page.dart';
 
 class WelcomeView extends StatelessWidget {
   const WelcomeView({super.key});
@@ -58,7 +58,7 @@ class WelcomeView extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => TasksListView()),
+                    MaterialPageRoute(builder: (context) => HomePage()),
                   );
                 },
               ),
