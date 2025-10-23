@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_list_app/widgets/add_task_bottom_sheet.dart'
 
-import '../models/taskModel.dart';;
+import '../models/taskModel.dart';
+import '../widgets/add_task_bottom_sheet.dart';
+import '../widgets/task_item.dart';
 
 class TasksListView extends StatefulWidget {
   const TasksListView({super.key});
