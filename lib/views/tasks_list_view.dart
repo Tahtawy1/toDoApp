@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:to_do_list_app/widgets/add_task_bottom_sheet.dart';
+import '../models/taskModel.dart';
+import '../widgets/add_task_bottom_sheet.dart';
+import '../widgets/task_item.dart';
 
-class TasksListView extends StatelessWidget {
+import '../models/taskModel.dart';
+
+class TasksListView extends StatefulWidget {
   const TasksListView({super.key});
 
+  @override
+  State<TasksListView> createState() => _TasksListViewState();
+}
+
+class _TasksListViewState extends State<TasksListView> {
+  List<TaskModel> tasks = [
+    TaskModel(text: "Design New UI For Dashboard", isComplete: true),
+    TaskModel(text: "Design New UI For Dashboard", isComplete: false),
+    TaskModel(text: "Design New UI For Dashboard", isComplete: true),
+    TaskModel(text: "Design New UI For Dashboard", isComplete: false),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,27 +110,12 @@ class TasksListView extends StatelessWidget {
                       SizedBox(height: 12),
                       Expanded(
                         child: ListView.builder(
-                          itemBuilder: (context, index) {
-                            return Row(
-                              children: [
-                                Checkbox(
-                                  activeColor: Color(0xff2B7FFF),
-                                  value: true,
-                                  side: BorderSide(
-                                    color: Colors.black26,
-                                    width: 2,
-                                  ),
-                                  onChanged: (val) {},
-                                ),
-                                SizedBox(width: 12),
-                                Text(
-                                  'Design New UI For Dashboard',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                              ],
+                          itemCount: tasks.length,
+
+                          itemBuilder: (context, i) {
+                            return TaskItem(
+                              text: tasks[i].text,
+                              isComplete: tasks[i].isComplete,
                             );
                           },
                         ),
