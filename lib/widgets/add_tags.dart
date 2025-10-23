@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AddTags extends StatelessWidget {
-  AddTags({super.key, required this.isActive, required this.onTap});
-  bool isActive;
-  VoidCallback onTap;
+  const AddTags({super.key, required this.isActive, required this.onTap});
+  final bool isActive;
+  final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
     return Align(

@@ -4,14 +4,19 @@ import 'package:to_do_list_app/utils/outline_input_border.dart';
 
 // ignore: must_be_immutable
 class TaskDateFormField extends StatelessWidget {
-  final GlobalKey<FormState> formKey = GlobalKey();
+  final GlobalKey<FormState> dateFormKey;
   DateTime? taskCreatedDate;
-  TaskDateFormField({super.key});
+  TaskDateFormField({
+    super.key,
+    required this.dateFormKey,
+    required this.taskCreatedDate,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: formKey,
+      key: dateFormKey,
+
       child: DateTimeFormField(
         validator: (value) {
           if (value?.toString().isEmpty ?? true) {
@@ -19,7 +24,7 @@ class TaskDateFormField extends StatelessWidget {
           }
           return null;
         },
-        onChanged: (value) {
+        onSaved: (value) {
           taskCreatedDate = value;
         },
         mode: DateTimeFieldPickerMode.date,

@@ -1,20 +1,18 @@
 // ignore: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:to_do_list_app/widgets/add_tags.dart';
-import 'package:to_do_list_app/widgets/add_task_bottom_sheet.dart';
 import 'package:to_do_list_app/widgets/tag_field.dart';
 import 'package:to_do_list_app/widgets/tag_widget.dart';
 
 class TagsSection extends StatefulWidget {
-  const TagsSection({super.key});
+  const TagsSection({super.key, required this.tags});
+  final List<String> tags;
 
   @override
   State<TagsSection> createState() => _TagsSectionState();
 }
 
 class _TagsSectionState extends State<TagsSection> {
-  List<String> tags = ['Work', 'Personal'];
-
   bool isActive = false;
 
   @override
@@ -23,12 +21,11 @@ class _TagsSectionState extends State<TagsSection> {
       spacing: 8,
       runSpacing: 8,
       children: [
-        ...tags.map(
+        ...widget.tags.map(
           (tag) => TagWidget(
             tagText: tag,
             onTap: () {
-              print("Removed !!");
-              tags.remove(tag);
+              widget.tags.remove(tag);
               setState(() {});
             },
           ),
@@ -37,8 +34,10 @@ class _TagsSectionState extends State<TagsSection> {
             ? TagField(
                 onSubmitted: (value) {
                   setState(() {
-                    tags.add(value);
-                    isActive = false;
+                    if (value.trim().isNotEmpty) {
+                      widget.tags.add(value);
+                      isActive = false;
+                    }
                   });
                 },
               )
