@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list_app/views/home_page.dart';
-import 'package:to_do_list_app/widgets/task.dart';
+import 'package:to_do_list_app/models/task.dart';
 
 // ignore: must_be_immutable
 class CompletedTasksList extends StatefulWidget {
-  CompletedTasksList({super.key, required this.completeTaskCounter});
+  CompletedTasksList({
+    super.key,
+    required this.completeTaskCounter,
+    required this.tasks,
+  });
   int completeTaskCounter;
-
+  List<Task> tasks;
   @override
   State<CompletedTasksList> createState() => _CompletedTasksListState();
 }
@@ -20,7 +24,7 @@ class _CompletedTasksListState extends State<CompletedTasksList> {
   }
 
   void searchForCompletedTasks() {
-    for (var task in tasks) {
+    for (var task in widget.tasks) {
       if (task.isComplete) {
         completedTasks.add(task);
       }
@@ -51,7 +55,7 @@ class _CompletedTasksListState extends State<CompletedTasksList> {
             ),
             SizedBox(height: 8),
             LinearProgressIndicator(
-              value: taha / tasks.length,
+              value: completedTasksCounter / widget.tasks.length,
               borderRadius: BorderRadius.circular(6),
               backgroundColor: Color(0xffE2E8F0),
               color: Color(0xff2B7FFF),
@@ -59,7 +63,7 @@ class _CompletedTasksListState extends State<CompletedTasksList> {
             ),
             SizedBox(height: 8),
             Text(
-              '$taha/${tasks.length} Tasks Completed',
+              '$completedTasksCounter/${widget.tasks.length} Tasks Completed',
               style: TextStyle(color: Color(0xff90A1B9)),
             ),
             SizedBox(height: 24),
@@ -99,25 +103,15 @@ class _CompletedTasksListState extends State<CompletedTasksList> {
                               children: [
                                 Checkbox(
                                   activeColor: Color(0xff007AFF),
-                                  value: tasks[i].isComplete,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      tasks[i].isComplete =
-                                          !tasks[i].isComplete;
-                                      if (tasks[i].isComplete) {
-                                        widget.completeTaskCounter++;
-                                      } else {
-                                        widget.completeTaskCounter--;
-                                      }
-                                    });
-                                  },
+                                  value: completedTasks[i].isComplete,
+                                  onChanged: (v) {},
                                 ),
                                 SizedBox(width: 5),
                                 Expanded(
                                   child: Text(
-                                    tasks[i].taskTitle,
+                                    completedTasks[i].taskTitle,
                                     style: TextStyle(
-                                      decoration: tasks[i].isComplete
+                                      decoration: completedTasks[i].isComplete
                                           ? TextDecoration.lineThrough
                                           : TextDecoration.none,
                                       fontSize: 16,

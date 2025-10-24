@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list_app/widgets/priority_section.dart';
 import 'package:to_do_list_app/widgets/tags_section.dart';
-import 'package:to_do_list_app/widgets/task.dart';
+import 'package:to_do_list_app/models/task.dart';
 import 'package:to_do_list_app/widgets/task_date_form_field.dart';
 import 'package:to_do_list_app/widgets/task_form_field.dart';
 
-class AddTaskBottomSheet extends StatefulWidget {
-  const AddTaskBottomSheet({super.key});
+// ignore: must_be_immutable
+class AddTaskBottomSheet extends StatelessWidget {
+  final Function(Task) onTaskAdded; //* the fun :)
 
-  @override
-  State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
-}
+  AddTaskBottomSheet({super.key, required this.onTaskAdded});
 
-class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   final GlobalKey<FormState> formKey = GlobalKey();
 
   final TextEditingController taskController = TextEditingController();
@@ -23,7 +21,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
 
   List<bool> isActive = [false, false, false];
 
-  List<String> tags = [];
+  List<String> tags = ['Work', 'Personal', 'Flutter'];
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +60,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               child: ListView(
                 children: [
                   SizedBox(height: 10),
-
                   Text(
                     'What do you want to do ?',
                     style: TextStyle(fontSize: 16),
@@ -107,25 +104,37 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 ),
               ),
               onPressed: () {
-                if (formKey.currentState!.validate() &&
-                    dateFormKey.currentState!.validate() &&
+                if (formKey.currentState!
+                        .validate() && //* validate the task text formField
+                    dateFormKey.currentState!
+                        .validate() && //* validate the task date formField
                     isActive.contains(true)) {
+                  //* validate the task priority
                   String priority = isActive[0]
                       ? 'Low'
                       : isActive[1]
                       ? 'Medium'
                       : 'High';
 
-                  Task taskAdded = Task(
+                  final task = Task(
                     taskTitle: taskController.text,
                     taskDate: taskCreatedDate,
                     priority: priority,
                     tags: tags,
                   );
 
-                  setState(() {});
-                  Navigator.pop(context, taskAdded);
-                } else {}
+                  onTaskAdded(
+                    task,
+                  ); // * This is the fun to add task in homepage to setState
+                  final newTask = Task(
+                    taskTitle: taskController.text,
+                    taskDate: taskCreatedDate,
+                    priority: priority,
+                    tags: tags,
+                  );
+                  Navigator.pop(context, newTask);
+                  //* Here i pass the new task in POP to add in homepage
+                }
               },
             ),
             SizedBox(height: 16),

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list_app/views/home_page.dart';
-import 'package:to_do_list_app/widgets/task.dart';
+import 'package:to_do_list_app/models/task.dart';
 
 // ignore: must_be_immutable
 class AllTasksList extends StatefulWidget {
-  AllTasksList({super.key, required this.completeTaskCounter});
+  AllTasksList({
+    super.key,
+    required this.completeTaskCounter,
+    required this.tasks,
+  });
   int completeTaskCounter;
+  List<Task> tasks;
   @override
   State<AllTasksList> createState() => _AllTasksListState();
 }
@@ -22,13 +27,13 @@ class _AllTasksListState extends State<AllTasksList> {
             Column(
               children: [
                 Text(
-                  'Good Morning, Taha',
+                  'Good Morning, There',
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
             Text(
-              'Sunday, October 24',
+              'Sunday, October 26',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -42,7 +47,7 @@ class _AllTasksListState extends State<AllTasksList> {
             ),
             SizedBox(height: 8),
             LinearProgressIndicator(
-              value: widget.completeTaskCounter / tasks.length,
+              value: completedTasksCounter / widget.tasks.length,
               borderRadius: BorderRadius.circular(6),
               backgroundColor: Color(0xffE2E8F0),
               color: Color(0xff2B7FFF),
@@ -50,7 +55,7 @@ class _AllTasksListState extends State<AllTasksList> {
             ),
             SizedBox(height: 8),
             Text(
-              '${widget.completeTaskCounter}/${tasks.length} Tasks Completed',
+              '$completedTasksCounter/${widget.tasks.length} Tasks Completed',
               style: TextStyle(color: Color(0xff90A1B9)),
             ),
             SizedBox(height: 24),
@@ -83,22 +88,25 @@ class _AllTasksListState extends State<AllTasksList> {
                     SizedBox(height: 12),
                     Expanded(
                       child: ListView.builder(
-                        itemCount: tasks.length,
+                        itemCount: widget.tasks.length,
                         itemBuilder: (context, i) {
                           return Row(
                             children: [
                               Checkbox(
                                 activeColor: Color(0xff007AFF),
-                                value: tasks[i].isComplete,
+                                value: widget.tasks[i].isComplete,
                                 onChanged: (val) {
                                   setState(() {
-                                    tasks[i].isComplete = !tasks[i].isComplete;
-                                    if (tasks[i].isComplete) {
-                                      widget.completeTaskCounter++;
-                                      taha = widget.completeTaskCounter;
+                                    widget.tasks[i].isComplete =
+                                        !widget.tasks[i].isComplete;
+                                    if (widget.tasks[i].isComplete) {
+                                      completedTasksCounter++;
+                                      completedTasksCounter =
+                                          completedTasksCounter;
                                     } else {
-                                      widget.completeTaskCounter--;
-                                      taha = widget.completeTaskCounter;
+                                      completedTasksCounter--;
+                                      completedTasksCounter =
+                                          completedTasksCounter;
                                     }
                                   });
                                 },
@@ -106,9 +114,9 @@ class _AllTasksListState extends State<AllTasksList> {
                               SizedBox(width: 5),
                               Expanded(
                                 child: Text(
-                                  tasks[i].taskTitle,
+                                  widget.tasks[i].taskTitle,
                                   style: TextStyle(
-                                    decoration: tasks[i].isComplete
+                                    decoration: widget.tasks[i].isComplete
                                         ? TextDecoration.lineThrough
                                         : TextDecoration.none,
                                     fontSize: 16,

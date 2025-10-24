@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list_app/views/all_tasks_list.dart';
 import 'package:to_do_list_app/views/completed_tasks_list.dart';
+import 'package:to_do_list_app/models/task.dart';
 import '../widgets/add_task_bottom_sheet.dart';
 
-int taha = 0;
+int completedTasksCounter = 0; //? The counter of Completed Tasks
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,41 +14,66 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0;
-  final List<Widget> pages = [
-    AllTasksList(completeTaskCounter: 0),
-    CompletedTasksList(completeTaskCounter: 0),
+  //* list of class Task
+  List<Task> tasks = [
+    Task(
+      taskTitle: 'Finish To Do App before the deadline',
+      taskDate: DateTime(2025, 10, 25),
+      priority: 'high',
+      tags: ['Flutter', 'Dev Arena'],
+    ),
+    Task(
+      taskTitle: 'Finish DBMS 4 lectures',
+      taskDate: DateTime(2025, 11, 6),
+      priority: 'Low',
+      tags: ['FCI'],
+    ),
+    Task(
+      taskTitle: 'Study Flutter & Dart for the Competition',
+      taskDate: DateTime(2025, 10, 25),
+      priority: 'Medium',
+      tags: ['Flutter', 'Dev Arena'],
+    ),
   ];
 
+  int _currentIndex = 0; //? this is the index in bottom navigation bar
+  int count = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //* show bottom sheet
-      floatingActionButton: _currentIndex == 0
-          ? GestureDetector(
-              onTap: () => showModalBottomSheet(
-                isScrollControlled: true,
-                context: context,
-                builder: (context) {
-                  return AddTaskBottomSheet();
-                },
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Color(0xff007AFF),
-                ),
-                height: 70,
-                width: 70,
-                child: Icon(Icons.add, color: Colors.white),
-              ),
+      floatingActionButton:
+          _currentIndex ==
+              0 //* only show in AllTasksView
+          //* Floating Action Button
+          ? FloatingActionButton(
+              backgroundColor: Color(0xff2B7FFF),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) => AddTaskBottomSheet(
+                    //? This is Custom Bottom sheet
+                    //* This is the function to setState in main page not in bottom sheet
+                    onTaskAdded: (task) {
+                      setState(() {
+                        tasks.add(task);
+                      });
+                    },
+                  ),
+                );
+              },
+              child: const Icon(Icons.add, color: Colors.white),
             )
           : null,
-      body: pages[_currentIndex],
+
+      body: _currentIndex == 0
+          ? AllTasksList(tasks: tasks, completeTaskCounter: count)
+          : CompletedTasksList(tasks: tasks, completeTaskCounter: count),
       bottomNavigationBar: Theme(
         data: ThemeData(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
+          splashColor: Colors.transparent, //* Remove splash color
+          highlightColor:
+              Colors.transparent, //* Remove HighLight when we click on buttons
         ),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
@@ -67,6 +93,7 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(
               label: 'Home',
               icon: ImageIcon(AssetImage('assets/images/homeIcon.png')),
+              //* ImageIcon allow us to change the image color
             ),
             BottomNavigationBarItem(
               label: 'Completed',
